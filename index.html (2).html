@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inna Shop – Robes & Élégance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #faf6f1; --sand: #e8ddd0; --rose: #c9a99a;
+      --dark-rose: #9e6f63; --earth: #3d2b22; --gold: #c8a96e; --white: #fffdf9;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--earth); overflow-x: hidden; cursor: none; }
+
+    .cursor { position: fixed; width: 10px; height: 10px; background: var(--rose); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; transform: translate(-50%, -50%); }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--rose); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.35s ease, width 0.3s, height 0.3s; transform: translate(-50%, -50%); opacity: 0.6; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 3rem; background: rgba(250,246,241,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(200,169,154,0.2); animation: fadeDown 0.8s ease both; }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none} }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; letter-spacing: 0.12em; color: var(--earth); }
+    .nav-logo span { color: var(--dark-rose); font-style: italic; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--earth); text-decoration: none; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
+    .nav-links a:hover { opacity: 1; color: var(--dark-rose); }
+    .nav-cart { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--earth); opacity: 0.7; cursor: pointer; transition: opacity 0.3s; }
+    .nav-cart:hover { opacity: 1; }
+    .cart-badge { background: var(--dark-rose); color: white; font-size: 0.6rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
+    .hero-text { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem 5rem 5rem; animation: fadeLeft 1s ease 0.3s both; }
+    @keyframes fadeLeft { from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none} }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 5vw, 5.5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.8rem; }
+    .hero-title em { font-style: italic; color: var(--dark-rose); }
+    .hero-desc { font-size: 0.92rem; font-weight: 300; line-height: 1.8; opacity: 0.7; max-width: 380px; margin-bottom: 3rem; }
+    .hero-actions { display: flex; gap: 1.2rem; align-items: center; }
+    .btn-primary { background: var(--earth); color: var(--cream); padding: 0.9rem 2.2rem; font-family: 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.3s, transform 0.2s; }
+    .btn-primary:hover { background: var(--dark-rose); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--earth); padding: 0.9rem 2.2rem; font-family: 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid var(--earth); cursor: pointer; transition: all 0.3s; }
+    .btn-outline:hover { background: var(--earth); color: var(--cream); }
+
+    .hero-visual { position: relative; overflow: hidden; animation: fadeRight 1s ease 0.5s both; }
+    @keyframes fadeRight { from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none} }
+    .hero-bg-shape { position: absolute; inset: 0; background: linear-gradient(135deg, var(--sand) 0%, var(--rose) 60%, var(--dark-rose) 100%); }
+    .dress-silhouette { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 340px; height: 580px; }
+    .floating-tag { position: absolute; background: var(--white); padding: 0.8rem 1.2rem; box-shadow: 0 8px 40px rgba(0,0,0,0.1); animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
+    .floating-tag:nth-child(1){top:15%;left:8%;animation-delay:0s}
+    .floating-tag:nth-child(2){top:40%;right:6%;animation-delay:1s}
+    .floating-tag:nth-child(3){bottom:22%;left:5%;animation-delay:0.5s}
+    .tag-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; }
+    .tag-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--earth); }
+
+    .marquee-band { background: var(--earth); color: var(--cream); padding: 0.9rem 0; overflow: hidden; white-space: nowrap; }
+    .marquee-inner { display: inline-block; animation: marquee 18s linear infinite; }
+    .marquee-inner span { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; margin: 0 2.5rem; opacity: 0.8; }
+    .marquee-inner span.dot { color: var(--gold); opacity: 1; font-size: 0.9rem; }
+    @keyframes marquee { from{transform:translateX(0)}to{transform:translateX(-50%)} }
+
+    .features { background: var(--sand); display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid rgba(61,43,34,0.1); border-bottom: 1px solid rgba(61,43,34,0.1); }
+    .feature-item { padding: 2.5rem 3rem; border-right: 1px solid rgba(61,43,34,0.1); display: flex; align-items: center; gap: 1.2rem; }
+    .feature-item:last-child { border-right: none; }
+    .feature-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .feature-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; margin-bottom: 0.2rem; }
+    .feature-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; }
+
+    .section { padding: 6rem 4rem; }
+    .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3.5rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 300; line-height: 1.15; }
+    .section-title em { font-style: italic; color: var(--dark-rose); }
+    .section-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; margin-bottom: 0.3rem; }
+    .see-all { font-size: 0.73rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--earth); text-decoration: none; border-bottom: 1px solid var(--rose); padding-bottom: 2px; }
+
+    .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; gap: 1rem; grid-column: 1/-1; }
+    .spinner { width: 36px; height: 36px; border: 2px solid var(--sand); border-top-color: var(--dark-rose); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .loading-text { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
+    .error-state { grid-column: 1/-1; text-align: center; padding: 3rem; }
+    .error-state p { font-size: 0.9rem; opacity: 0.6; margin-bottom: 1rem; }
+    .retry-btn { background: var(--earth); color: var(--cream); padding: 0.7rem 1.8rem; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; }
+
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; min-height: 300px; }
+    .product-card { position: relative; cursor: pointer; animation: fadeUp 0.8s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:none} }
+    .product-image { position: relative; overflow: hidden; aspect-ratio: 2/3; background: var(--sand); }
+    .product-image-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transition: transform 0.6s ease; }
+    .product-card:hover .product-image-inner { transform: scale(1.04); }
+    .dress-icon { transition: transform 0.4s ease; }
+    .product-card:hover .dress-icon { transform: translateY(-6px); }
+    .product-overlay { position: absolute; inset: 0; background: rgba(61,43,34,0); transition: background 0.4s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1.5rem; }
+    .product-card:hover .product-overlay { background: rgba(61,43,34,0.18); }
+    .overlay-btn { background: var(--white); color: var(--earth); padding: 0.7rem 1.6rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; border: none; cursor: pointer; opacity: 0; transform: translateY(8px); transition: all 0.35s ease; }
+    .product-card:hover .overlay-btn { opacity: 1; transform: translateY(0); }
+    .product-badge { position: absolute; top: 1rem; left: 1rem; color: white; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.7rem; }
+    .product-info { padding: 1rem 0 0.3rem; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; margin-bottom: 0.3rem; }
+    .product-meta { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-size: 0.85rem; font-weight: 500; color: var(--dark-rose); display: flex; gap: 0.5rem; align-items: center; }
+    .old-price { font-size: 0.72rem; opacity: 0.4; text-decoration: line-through; color: var(--earth); }
+    .product-colors { display: flex; gap: 0.35rem; }
+    .color-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(61,43,34,0.15); }
+
+    .promo-banner { margin: 0 4rem 4rem; background: linear-gradient(120deg, var(--earth) 0%, #5a3d32 100%); color: var(--cream); display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 3.5rem 4rem; position: relative; overflow: hidden; }
+    .promo-banner::before { content:''; position: absolute; right: -60px; top: -60px; width: 250px; height: 250px; border-radius: 50%; background: rgba(200,169,154,0.15); }
+    .promo-tag { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .promo-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem,3vw,3rem); font-weight: 300; margin-bottom: 0.5rem; }
+    .promo-title em { font-style: italic; color: var(--rose); }
+    .promo-desc { font-size: 0.85rem; opacity: 0.6; max-width: 400px; }
+    .promo-code { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; position: relative; z-index: 1; }
+    .code-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
+    .code-box { background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); padding: 0.8rem 2.5rem; font-family: 'Cormorant Garamond', serif; font-size: 2rem; letter-spacing: 0.1em; color: var(--gold); }
+    .code-copy { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; cursor: pointer; border-bottom: 1px solid currentColor; transition: opacity 0.3s; }
+    .code-copy:hover { opacity: 0.8; }
+
+    .newsletter { padding: 5rem 4rem; text-align: center; border-top: 1px solid rgba(61,43,34,0.08); }
+    .newsletter-eyebrow { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .newsletter-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,3vw,3rem); font-weight: 300; margin-bottom: 0.8rem; }
+    .newsletter-title em { font-style: italic; color: var(--dark-rose); }
+    .newsletter-desc { font-size: 0.85rem; opacity: 0.6; max-width: 420px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .newsletter-form { display: flex; max-width: 420px; margin: 0 auto; border: 1px solid rgba(61,43,34,0.25); }
+    .newsletter-form input { flex: 1; padding: 0.9rem 1.2rem; font-family: 'Jost', sans-serif; font-size: 0.82rem; background: transparent; border: none; outline: none; color: var(--earth); }
+    .newsletter-form input::placeholder { opacity: 0.4; }
+    .newsletter-form button { background: var(--earth); color: var(--cream); padding: 0.9rem 1.5rem; font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.3s; }
+    .newsletter-form button:hover { background: var(--dark-rose); }
+
+    footer { background: var(--earth); color: var(--cream); padding: 3.5rem 4rem 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .footer-logo span { font-style: italic; color: var(--rose); }
+    .footer-about { font-size: 0.82rem; opacity: 0.5; line-height: 1.7; max-width: 260px; }
+    .footer-col-title { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; margin-bottom: 1.2rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-links a { font-size: 0.83rem; opacity: 0.6; text-decoration: none; color: var(--cream); transition: opacity 0.3s; }
+    .footer-links a:hover { opacity: 1; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-copy { font-size: 0.72rem; opacity: 0.35; }
+    .social-links { display: flex; gap: 1rem; }
+    .social-links a { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.4; color: var(--cream); text-decoration: none; transition: opacity 0.3s; }
+    .social-links a:hover { opacity: 0.9; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-visual { height: 60vw; min-height: 280px; }
+      .hero-text { padding: 3rem 1.5rem; }
+      .products-grid { grid-template-columns: repeat(2,1fr); }
+      .features { grid-template-columns: 1fr; }
+      .feature-item { border-right: none; border-bottom: 1px solid rgba(61,43,34,0.1); }
+      .section { padding: 4rem 1.5rem; }
+      .promo-banner { margin: 0 1.5rem 3rem; grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .newsletter { padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Inna <span>Shop</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Nouveautés</a></li>
+    <li><a href="#">Collections</a></li>
+    <li><a href="#">Soldes</a></li>
+    <li><a href="#">À propos</a></li>
+  </ul>
+  <div class="nav-cart">🛍 Panier <div class="cart-badge" id="cartBadge">0</div></div>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-tag">✦ Nouvelle collection printemps 2026</p>
+    <h1 class="hero-title">L'élégance,<br>à votre <em>image.</em></h1>
+    <p class="hero-desc">Chez Inna Shop, chaque robe raconte une histoire. Découvrez des pièces uniques alliant modernité et féminité, conçues pour vous faire rayonner.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Découvrir la collection</button>
+      <button class="btn-outline">Nos best-sellers</button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-bg-shape"></div>
+    <div class="floating-tag"><div class="tag-label">Livraison</div><div class="tag-value">Rapide & Sûre</div></div>
+    <div class="floating-tag"><div class="tag-label">Qualité</div><div class="tag-value">Premium ✦</div></div>
+    <div class="floating-tag"><div class="tag-label">Paiement</div><div class="tag-value">Sécurisé</div></div>
+    <div class="dress-silhouette">
+      <svg viewBox="0 0 340 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M130 80 C130 80 100 110 95 160 L85 260 L255 260 L245 160 C240 110 210 80 210 80 Z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        <path d="M85 260 C60 320 30 400 20 500 L320 500 C310 400 280 320 255 260 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <path d="M165 80 C155 70 145 65 130 80" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+        <path d="M175 80 C185 70 195 65 210 80" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+        <line x1="85" y1="240" x2="255" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
+        <path d="M145 80 Q140 50 150 40 Q160 30 170 35" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+        <path d="M195 80 Q200 50 190 40 Q180 30 170 35" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-band">
+  <div class="marquee-inner">
+    <span>Nouvelle collection</span><span class="dot">✦</span>
+    <span>Livraison express</span><span class="dot">✦</span>
+    <span>Tailles 36 – 50</span><span class="dot">✦</span>
+    <span>Paiement sécurisé</span><span class="dot">✦</span>
+    <span>Retours faciles</span><span class="dot">✦</span>
+    <span>Inna Shop</span><span class="dot">✦</span>
+    <span>Nouvelle collection</span><span class="dot">✦</span>
+    <span>Livraison express</span><span class="dot">✦</span>
+    <span>Tailles 36 – 50</span><span class="dot">✦</span>
+    <span>Paiement sécurisé</span><span class="dot">✦</span>
+    <span>Retours faciles</span><span class="dot">✦</span>
+    <span>Inna Shop</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<div class="features">
+  <div class="feature-item"><div class="feature-icon">🚚</div><div><div class="feature-label">Livraison</div><div class="feature-desc">Rapide & partout au Sénégal</div></div></div>
+  <div class="feature-item"><div class="feature-icon">✨</div><div><div class="feature-label">Qualité</div><div class="feature-desc">Tissus soigneusement sélectionnés</div></div></div>
+  <div class="feature-item"><div class="feature-icon">🔒</div><div><div class="feature-label">Paiement</div><div class="feature-desc">100% sécurisé — Wave, Orange Money</div></div></div>
+</div>
+
+<section class="section" id="collection">
+  <div class="section-header">
+    <div>
+      <p class="section-sub">Sélection du moment</p>
+      <h2 class="section-title">Nos <em>Robes</em><br>Best-Sellers</h2>
+    </div>
+    <a href="#" class="see-all">Voir tout →</a>
+  </div>
+  <div class="products-grid" id="productsGrid">
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <div class="loading-text">Chargement des articles...</div>
+    </div>
+  </div>
+</section>
+
+<div class="promo-banner reveal">
+  <div>
+    <p class="promo-tag">✦ Offre limitée</p>
+    <h3 class="promo-title">-15% sur votre<br><em>première commande</em></h3>
+    <p class="promo-desc">Inscrivez-vous à notre newsletter et profitez de votre réduction dès maintenant.</p>
+  </div>
+  <div class="promo-code">
+    <div class="code-label">Votre code promo</div>
+    <div class="code-box">INNA15</div>
+    <div class="code-copy" onclick="navigator.clipboard.writeText('INNA15');this.textContent='Copié ✓'">Copier le code</div>
+  </div>
+</div>
+
+<section class="newsletter reveal">
+  <p class="newsletter-eyebrow">✦ Restez connectée</p>
+  <h2 class="newsletter-title">Les <em>dernières</em> tendances,<br>directement chez vous</h2>
+  <p class="newsletter-desc">Abonnez-vous pour recevoir nos nouvelles collections, offres exclusives et conseils mode en avant-première.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="Votre adresse e-mail..." />
+    <button>S'abonner</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Inna <span>Shop</span></div>
+      <p class="footer-about">Votre boutique de robes en ligne. Nous croyons que chaque femme mérite de se sentir belle, à tout moment.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links"><li><a href="#">Accueil</a></li><li><a href="#">Collections</a></li><li><a href="#">Nouveautés</a></li><li><a href="#">Promotions</a></li></ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Aide</div>
+      <ul class="footer-links"><li><a href="#">FAQ</a></li><li><a href="#">Livraison</a></li><li><a href="#">Retours</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links"><li><a href="#">📱 WhatsApp</a></li><li><a href="#">📧 Email</a></li><li><a href="#">📍 Dakar, Sénégal</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Inna Shop. Tous droits réservés.</div>
+    <div class="social-links"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a></div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // VOTRE LIEN GOOGLE SHEETS — Ne pas modifier cette ligne
+  // ============================================================
+  const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQq1M_5vtiOIcOsgKAG4n5Dlye0gdhynrd9-rM-oNdUyFpBS64OBtyYVECD_Oaa4BMW3I63AejuDh8b/pub?gid=0&single=true&output=csv';
+
+  // Palettes visuelles pour les illustrations
+  const dressPalettes = [
+    { bg: '#f0e4de', fill: '#c9a99a', dark: '#b89088' },
+    { bg: '#e8ddd0', fill: '#3d2b22', dark: '#2d1d15' },
+    { bg: '#f5eedd', fill: '#c8a96e', dark: '#b5953e' },
+    { bg: '#ede0db', fill: '#9e6f63', dark: '#7d5449' },
+    { bg: '#e8f0ed', fill: '#5a8a78', dark: '#3d6b5a' },
+    { bg: '#f0e8f5', fill: '#9a7ab5', dark: '#7a5a95' },
+  ];
+
+  const badgeColors = { 'nouveau':'#9e6f63','promo':'#c8a96e','exclusif':'#5a3d32','solde':'#b04040' };
+
+  function dressSVG(palette, i) {
+    const designs = [
+      `<svg class="dress-icon" width="160" height="260" viewBox="0 0 160 280" fill="none">
+        <path d="M60 50 C60 50 45 70 42 110 L35 180 L125 180 L118 110 C115 70 100 50 100 50 Z" fill="${palette.fill}"/>
+        <path d="M35 180 C20 220 8 270 3 310 L157 310 C152 270 140 220 125 180 Z" fill="${palette.dark}"/>
+        <path d="M78 50 C72 42 65 38 60 50" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+        <path d="M82 50 C88 42 95 38 100 50" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+        <line x1="35" y1="165" x2="125" y2="165" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+      </svg>`,
+      `<svg class="dress-icon" width="160" height="260" viewBox="0 0 160 280" fill="none">
+        <path d="M55 40 L105 40 L115 110 L125 180 L35 180 L45 110 Z" fill="${palette.fill}"/>
+        <path d="M35 180 C18 225 5 270 0 310 L160 310 C155 270 142 225 125 180 Z" fill="${palette.dark}"/>
+        <rect x="55" y="38" width="50" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+        <line x1="35" y1="165" x2="125" y2="165" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      </svg>`,
+      `<svg class="dress-icon" width="160" height="260" viewBox="0 0 160 280" fill="none">
+        <path d="M65 45 Q80 35 95 45 L110 80 L120 180 L40 180 L50 80 Z" fill="${palette.fill}"/>
+        <path d="M40 180 C22 228 10 270 5 310 L155 310 C150 270 138 228 120 180 Z" fill="${palette.dark}"/>
+        <circle cx="80" cy="58" r="12" fill="rgba(255,255,255,0.3)"/>
+        <line x1="40" y1="165" x2="120" y2="165" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="3 3"/>
+      </svg>`,
+      `<svg class="dress-icon" width="160" height="260" viewBox="0 0 160 280" fill="none">
+        <path d="M58 35 Q80 28 102 35 L110 65 Q95 75 80 72 Q65 75 50 65 Z" fill="${palette.fill}"/>
+        <path d="M50 65 Q65 75 80 72 Q95 75 110 65 L120 180 L40 180 Z" fill="${palette.fill}"/>
+        <path d="M40 180 C15 235 5 280 0 315 L160 315 C155 280 145 235 120 180 Z" fill="${palette.dark}"/>
+        <circle cx="80" cy="120" r="7" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="65" cy="112" r="4" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="95" cy="112" r="4" fill="rgba(255,255,255,0.15)"/>
+      </svg>`,
+    ];
+    return designs[i % designs.length];
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,'').toLowerCase());
+    return lines.slice(1).map(line => {
+      const cols = []; let cur = '', inQ = false;
+      for (let c of line) {
+        if (c==='"'){inQ=!inQ;}
+        else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
+        else{cur+=c;}
+      }
+      cols.push(cur.trim());
+      const obj = {};
+      headers.forEach((h,i)=>{ obj[h]=(cols[i]||'').replace(/"/g,'').trim(); });
+      return obj;
+    }).filter(r => r.nom && r.nom.length > 0);
+  }
+
+  function renderProducts(products) {
+    const grid = document.getElementById('productsGrid');
+    if (!products.length) {
+      grid.innerHTML = `<div class="error-state"><p>Aucun article trouvé. Vérifiez votre Google Sheets.</p></div>`;
+      return;
+    }
+    grid.innerHTML = products.map((p, i) => {
+      const palette = dressPalettes[i % dressPalettes.length];
+      const badge = (p.badge||'').trim();
+      const badgeColor = badgeColors[badge.toLowerCase()] || '#9e6f63';
+      const badgeHTML = badge ? `<div class="product-badge" style="background:${badgeColor}">${badge}</div>` : '';
+      const prix = parseInt(p.prix)||0;
+      const ancienPrix = parseInt(p.ancien_prix)||0;
+      const prixHTML = ancienPrix > 0
+        ? `<span>${prix.toLocaleString('fr-FR')} FCFA</span><span class="old-price">${ancienPrix.toLocaleString('fr-FR')}</span>`
+        : `<span>${prix.toLocaleString('fr-FR')} FCFA</span>`;
+      const couleurs = p.couleurs ? p.couleurs.split(',').map(c=>c.trim()).filter(Boolean) : [];
+      const couleursHTML = couleurs.map(c=>`<div class="color-dot" style="background:${c}"></div>`).join('');
+      return `
+        <div class="product-card" style="animation-delay:${i*0.1}s">
+          <div class="product-image" style="background:${palette.bg}">
+            ${badgeHTML}
+            <div class="product-image-inner">${dressSVG(palette,i)}</div>
+            <div class="product-overlay">
+              <button class="overlay-btn" onclick="addToCart(this)">Ajouter au panier</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.nom}</div>
+            <div class="product-meta">
+              <div class="product-price">${prixHTML}</div>
+              <div class="product-colors">${couleursHTML}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function loadProducts() {
+    const grid = document.getElementById('productsGrid');
+    try {
+      const res = await fetch(SHEETS_CSV_URL);
+      if (!res.ok) throw new Error('Erreur');
+      const text = await res.text();
+      renderProducts(parseCSV(text));
+    } catch(e) {
+      grid.innerHTML = `<div class="error-state">
+        <p>Impossible de charger les articles. Vérifiez que votre Google Sheets est bien publié en CSV.</p>
+        <button class="retry-btn" onclick="loadProducts()">Réessayer</button>
+      </div>`;
+    }
+  }
+
+  let cartCount = 0;
+  function addToCart(btn) {
+    cartCount++;
+    document.getElementById('cartBadge').textContent = cartCount;
+    btn.textContent = '✓ Ajouté !';
+    setTimeout(()=> btn.textContent = 'Ajouter au panier', 1500);
+  }
+
+  // Curseur
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY; cursor.style.left=mx+'px';cursor.style.top=my+'px'; });
+  (function animateRing(){ rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12; ring.style.left=rx+'px';ring.style.top=ry+'px'; requestAnimationFrame(animateRing); })();
+  document.querySelectorAll('button,a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2)';ring.style.width='60px';ring.style.height='60px';});
+    el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='36px';ring.style.height='36px';});
+  });
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+  // Lancement
+  loadProducts();
+</script>
+</body>
+</html>
